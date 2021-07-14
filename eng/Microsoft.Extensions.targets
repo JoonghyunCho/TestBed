@@ -10,6 +10,7 @@
     <_MicrosoftGraphicsWin2DVersion>0.8.0.21</_MicrosoftGraphicsWin2DVersion>
     <_MicrosoftMauiGraphics>6.0.100-rc.1.382</_MicrosoftMauiGraphics>
     <_MicrosoftMauiGraphicsWin2D>6.0.100-rc.1.382</_MicrosoftMauiGraphicsWin2D>
+    <_MicrosoftMauiGraphicsSkia>6.0.100-rc.1.382</_MicrosoftMauiGraphicsSkia>
   </PropertyGroup>
    <!-- WINUI related Packages -->
   <PropertyGroup>
@@ -133,6 +134,13 @@
     <PackageReference
         Update="Microsoft.Web.WebView2"
         Version="$(_MicrosoftWebWebView2Version)"
+    />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('tizen')) == true OR '$(TargetFramework)' == 'net6.0-tizen'">
+    <PackageReference
+        Update="Microsoft.Maui.Graphics.Skia"
+        Version="$(_MicrosoftMauiGraphicsSkia)"
     />
   </ItemGroup>
 
