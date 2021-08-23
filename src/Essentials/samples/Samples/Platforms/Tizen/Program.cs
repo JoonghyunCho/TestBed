@@ -1,5 +1,4 @@
 using Microsoft.Maui;
-using Tizen.NET.MaterialComponents;
 
 namespace Samples.Tizen
 {
@@ -8,8 +7,6 @@ namespace Samples.Tizen
 		protected override void OnCreate()
 		{
 			base.OnCreate();
-
-			MaterialComponents.Init(DirectoryInfo.Resource);
 			Microsoft.Maui.Essentials.Platform.Init(CoreUIAppContext.GetInstance(this).MainWindow);
 		}
 
