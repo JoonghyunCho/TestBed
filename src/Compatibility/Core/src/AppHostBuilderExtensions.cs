@@ -154,6 +154,9 @@ namespace Microsoft.Maui.Controls.Hosting
 					handlers.TryAddCompatibilityRenderer(typeof(ViewCell), typeof(ViewCellRenderer));
 					handlers.TryAddCompatibilityRenderer(typeof(SwitchCell), typeof(SwitchCellRenderer));
 
+#if TIZEN
+					handlers.TryAddCompatibilityRenderer(typeof(ContentView), typeof(LayoutRenderer));
+#else
 					// This is for Layouts that currently don't work when assigned to LayoutHandler
 					handlers.TryAddCompatibilityRenderer(typeof(ContentView), typeof(DefaultRenderer));
 
