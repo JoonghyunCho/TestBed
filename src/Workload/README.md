@@ -93,6 +93,7 @@ installed:
 * `maui-maccatalyst`
 * `maui-macos`
 * `maui-windows`
+* `maui-tizen`
 
 Eventually, Android will have a `microsoft-android-sdk-minimal`
 workload id that excludes AOT compilers. We'll need to modify some of
