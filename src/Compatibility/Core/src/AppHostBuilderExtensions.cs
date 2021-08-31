@@ -159,6 +159,7 @@ namespace Microsoft.Maui.Controls.Hosting
 #else
 					// This is for Layouts that currently don't work when assigned to LayoutHandler
 					handlers.TryAddCompatibilityRenderer(typeof(ContentView), typeof(DefaultRenderer));
+#endif
 
 					DependencyService.Register<Xaml.ResourcesLoader>();
 					DependencyService.Register<NativeBindingService>();
