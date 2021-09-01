@@ -2,13 +2,9 @@ using Microsoft.Maui;
 
 namespace Samples.Tizen
 {
-	class Program : MauiApplication<Startup>
+	class Program : MauiApplication
 	{
-		protected override void OnCreate()
-		{
-			base.OnCreate();
-			Microsoft.Maui.Essentials.Platform.Init(CoreUIAppContext.GetInstance(this).MainWindow);
-		}
+		protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
 		static void Main(string[] args)
 		{
