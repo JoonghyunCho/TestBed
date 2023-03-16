@@ -59,7 +59,7 @@ jobs:
       run: |
         if [ ${{ env.TARGET_BRANCH }} == 'main' ]; then
           echo "destination=destinationBranch" >> $GITHUB_OUTPUT
-        else if [${{ env.TARGET_BRANCH }} == 'main']; then
+        elif [${{ env.TARGET_BRANCH }} == 'main']; then
           echo "destination=master" >> $GITHUB_OUTPUT
         else
           echo "## no specified tizen branch"
