@@ -1,0 +1,95 @@
+name: "Deploy Packages"
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
+
+env:
+  TARGET_BRANCH: ${{ github.event.inputs.target }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ env.TARGET_BRANCH }}
+        fetch-depth: 0
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.310'
+
+    - name: Git Config
+      run: |
+        git config --global user.name "Jay Cho"
+        git config --global user.email "chojoong@gmail.com"
+        git config core.sshCommand "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    - name: Get Version
+      id: version
+      run: |
+        source ./packaging/version.txt
+        VERSION=$RPM_VERSION.$((10000+$(git rev-list --count HEAD)))
+        echo VERSION=$VERSION
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Build
+      run: |
+        dotnet build Hello/Hello.csproj
+
+    - name: Tag Version
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        git tag -fa "v$VERSION" -m "Release $VERSION"
+        git push -f --tags origin refs/tags/"v$VERSION"
+
+    - name: Setup SSH private keys
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Specify Destination Branch
+      id: destination
+      run: |
+        if [ ${{ env.TARGET_BRANCH }} == 'main' ]; then
+          echo "destination=destinationBranch" >> $GITHUB_OUTPUT
+        else if [${{ env.TARGET_BRANCH }} == 'main']; then
+          echo "destination=master" >> $GITHUB_OUTPUT
+        else
+          echo "## no specified tizen branch"
+          exit 0
+        fi
+
+    - name: Submit changes to Tizen
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+        GITHUB_BRANCH: ${{ steps.destination.outputs.destination }}
+        GITHUB_URL: git@github.com:JoonghyunCho/TestBed.git
+      run: |
+        if [ -z "$GITHUB_BRANCH" ]; then
+          echo "## no specified tizen branch"
+          exit 0
+        fi
+        git remote add tizenv $GITHUB_URL
+        git fetch tizenv $GITHUB_BRANCH
+        git checkout -t tizenv/$GITHUB_BRANCH
+        git merge --no-edit -s recursive -X theirs origin/$TARGET_BRANCH
+        ./packaging/makespec.sh
+        git add packaging/
+        if [ $(git diff --cached --numstat | wc -l) -eq 0 ]; then
+          echo "## no changes to sync"
+          exit 0
+        fi
+        SUBMIT_TAG=submit/$GITHUB_BRANCH/$(date '+%Y%m%d.%H%M%S')
+        echo SUBMIT_TAG=$SUBMIT_TAG
+        git commit -m "Release $VERSION"
+        git tag -m "Release $VERSION" $SUBMIT_TAG
+        git push -f tizenv HEAD:$GITHUB_BRANCH
+        git push tizenv refs/tags/$SUBMIT_TAG
+        echo "::notice title=Submit Request TAG::$SUBMIT_TAG"

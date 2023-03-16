@@ -1,0 +1,2 @@
+# Tizen NUI FLUX Version
+RPM_VERSION=0.0.1

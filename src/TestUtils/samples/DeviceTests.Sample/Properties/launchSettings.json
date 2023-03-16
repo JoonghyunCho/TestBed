@@ -1,7 +1,0 @@
-{
-  "profiles": {
-    "Microsoft.Maui.TestUtils.DeviceTests.Sample": {
-      "commandName": "MsixPackage"
-    }
-  }
-}
