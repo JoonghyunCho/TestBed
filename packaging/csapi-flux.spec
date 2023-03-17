@@ -1,6 +1,6 @@
 # Auto-generated from csapi-flux.spec.in by makespec.sh
 
-%define FLUX_RPM_VERSION 0.0.1
+%define FLUX_RPM_VERSION 0.0.1.18183
 %define FLUX_ASSEMBLY_PATH /usr/share/dotnet.tizen/framework
 %define FLUX_PATH src/Tizen.NUI.FLUX/Tizen.NUI.FLUX.csproj
 %define FLUX_COMPONENT_PATH src/Tizen.NUI.FLUX.Component/Tizen.NUI.FLUX.Component.csproj
