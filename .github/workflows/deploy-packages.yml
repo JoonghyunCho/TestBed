@@ -32,6 +32,7 @@ jobs:
 
     - name: Get Version
       id: version
+      shell: bash
       run: |
         source ./packaging/version.txt
         VERSION=$RPM_VERSION.$((10000+$(git rev-list --count HEAD)))
@@ -49,10 +50,10 @@ jobs:
         git tag -fa "v$VERSION" -m "Release $VERSION"
         git push -f --tags origin refs/tags/"v$VERSION"
 
-    # - name: Setup SSH private keys
-    #   uses: webfactory/ssh-agent@v0.7.0
-    #   with:
-    #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Setup SSH private keys
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Specify Destination Branch
       id: destination
