@@ -80,7 +80,7 @@ jobs:
         git fetch tizenv $GITHUB_BRANCH
         git checkout -t tizenv/$GITHUB_BRANCH
         git merge --no-edit -s recursive -X theirs origin/$TARGET_BRANCH
-        ./packaging/makespec.sh
+        ./packaging/makespec.sh -r $VERSION
         git add packaging/
         if [ $(git diff --cached --numstat | wc -l) -eq 0 ]; then
           echo "## no changes to sync"
