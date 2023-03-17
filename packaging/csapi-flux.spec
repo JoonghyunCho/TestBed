@@ -43,6 +43,7 @@ install -p -m 644 src/Tizen.NUI.FLUX.Component/bin/Debug/netstandard2.0/*.dll %{
 
 %files
 %license LICENSE.samsung
+%manifest %{name}.manifest
 %{FLUX_ASSEMBLY_PATH}/*.dll
 
 %clean
